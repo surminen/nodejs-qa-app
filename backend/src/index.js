@@ -7,6 +7,35 @@ const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+const neode = require('neode');
+const instance = neode.fromEnv();
+
+instance.model('Question', {
+    question_id: {
+        primary: true,
+        type: 'uuid',
+        // Creates an Exists Constraint in Enterprise mode
+        required: true, 
+    },
+    title: {
+        type: 'string',
+        unique: 'true', // Creates a Unique Constraint
+    },
+    description: {
+        type: 'string',
+    },
+    answers: {
+        type: 'list',
+    }
+});
+
+instance.create('Question', {
+    title: 'Test title', answers: ['ans1', 'ans2']
+})
+.then(question => {
+    console.log(question.get('answers')[0]); // 'Adam'
+});
+
 // define the Express app
 const app = express();
 
@@ -69,6 +98,11 @@ app.post('/', checkJwt, (req, res) => {
       author: req.user.name,
     };
     questions.push(newQuestion);
+
+    instance.create('Question', {
+        title: title, description: description
+    })
+    
     res.status(200).send();
   });
   
@@ -87,7 +121,7 @@ app.post('/', checkJwt, (req, res) => {
   
     res.status(200).send();
   });
-  
+
 // start the server
 app.listen(8081, () => {
   console.log('listening on port 8081');
