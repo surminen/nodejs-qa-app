@@ -7,14 +7,15 @@ const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+// Use Neode for DB object modelling
 const neode = require('neode');
 const instance = neode.fromEnv();
 
+// Define the model to use storing data in neo4j
 instance.model('Question', {
     question_id: {
         primary: true,
         type: 'uuid',
-        // Creates an Exists Constraint in Enterprise mode
         required: true, 
     },
     title: {
@@ -49,21 +50,17 @@ app.use(morgan('combined'));
 
 // retrieve all questions
 app.get('/', (req, res) => {
-
     instance.all('Question')
     .then(collection => {
         const foo = collection.map(q => ({id: q.get('question_id'), 
                 title: q.get('title'), description: q.get('description'),
                 answers: q.get('answers').length, author: q.get('author')}));
         res.send(foo);
-
     })
-
 });
 
 // get a specific question
 app.get('/:id', (req, res) => {
-
   instance.find('Question', req.params.id)
     .then(q => {
         try {
@@ -72,11 +69,11 @@ app.get('/:id', (req, res) => {
             answ = "";
         }
 
-        const foo = {id: q.get('question_id'), 
+        const ques = {id: q.get('question_id'), 
         title: q.get('title'), description: q.get('description'),
         answers: [answ], author: q.get('author')};
 
-        res.send(foo);
+        res.send(ques);
     });
 });
 
@@ -101,7 +98,7 @@ app.post('/', checkJwt, (req, res) => {
     const x = instance.create('Question', {
         title: title, description: description, answers: [], author: req.user.name
     }).then(q => {
-        // res.status(200).send();
+        // Nothing yet
     });
 
     res.status(200).send();
