@@ -3,8 +3,8 @@ import axios from 'axios';
 import SubmitAnswer from './SubmitAnswer';
 import auth0Client from '../Auth';
 
-class Question extends Component {
-  constructor(props) {
+class Question extends Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       question: null,
@@ -25,7 +25,7 @@ class Question extends Component {
     });
   }
 
-  async submitAnswer(answer) {
+  async submitAnswer(answer: any) {
     await axios.post(`http://localhost:8081/answer/${this.state.question.id}`, {
       answer,
     }, {
@@ -47,7 +47,7 @@ class Question extends Component {
             <SubmitAnswer questionId={question.id} submitAnswer={this.submitAnswer} />
             <p>Answers:</p>
             {
-              question.answers.map((answer, idx) => (
+              question.answers.map((answer: any, idx: any) => (
                 <p className="lead" key={idx}>{answer.answer}</p>
               ))
             }

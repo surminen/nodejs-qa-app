@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-class Questions extends Component {
-  constructor(props) {
+class Questions extends Component<any, any> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -33,7 +33,7 @@ class Questions extends Component {
           </Link>
           {this.state.questions === null && <p>Loading questions...</p>}
           {
-            this.state.questions && this.state.questions.map(question => (
+            this.state.questions && this.state.questions.map( (question :any) => (
               <div key={question.id} className="col-sm-12 col-md-4 col-lg-3">
                 <Link to={`/question/${question.id}`}>
                   <div className="card text-white bg-success mb-3">

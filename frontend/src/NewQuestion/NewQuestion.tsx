@@ -3,8 +3,10 @@ import {withRouter} from 'react-router-dom';
 import auth0Client from '../Auth';
 import axios from 'axios';
 
-class NewQuestion extends Component {
-  constructor(props) {
+type State = {disabled: boolean, title: string, description: string};
+
+class NewQuestion extends Component<any, State> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -14,13 +16,13 @@ class NewQuestion extends Component {
     };
   }
 
-  updateDescription(value) {
+  updateDescription(value: string) {
     this.setState({
       description: value,
     });
   }
 
-  updateTitle(value) {
+  updateTitle(value: string) {
     this.setState({
       title: value,
     });

@@ -42,7 +42,7 @@ class App extends Component {
         <Route exact path='/callback' component={Callback}/>
 
         <SecuredRoute path='/new-question' component={NewQuestion} 
-          checkingSession={this.state.checkingSession} />
+        checkingSession={this.state.checkingSession} />
 
       </div>
     );

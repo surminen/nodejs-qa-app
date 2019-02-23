@@ -2,15 +2,17 @@ import React, {Component, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import auth0Client from '../Auth';
 
-class SubmitAnswer extends Component {
-  constructor(props) {
+type State = {answer: string};
+
+class SubmitAnswer extends Component<any, State> {
+  constructor(props: any) {
     super(props);
     this.state = {
       answer: '',
     };
   }
 
-  updateAnswer(value) {
+  updateAnswer(value: string) {
     this.setState({
       answer: value,
     });
