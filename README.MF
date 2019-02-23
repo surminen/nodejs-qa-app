@@ -1,0 +1,9 @@
+Run backend:
+> cd backend
+> node built
+
+Run frontend:
+> cd frontend
+> npm install
+> npm start
+
