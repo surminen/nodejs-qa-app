@@ -6,9 +6,11 @@ var helmet = require('helmet');
 var morgan = require('morgan');
 var jwt = require('express-jwt');
 var jwksRsa = require('jwks-rsa');
+
 // Use Neode for DB object modelling
 var neode = require('neode');
 var instance = neode.fromEnv();
+
 // Define the model to use storing data in neo4j
 instance.model('Question', {
     question_id: {
@@ -30,6 +32,7 @@ instance.model('Question', {
         type: 'string',
     }
 });
+
 // define the Express app
 var app = express();
 // enhance your app security with Helmet
@@ -40,6 +43,7 @@ app.use(bodyParser.json());
 app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
+
 // retrieve all questions
 app.get('/', function (req, res) {
     instance.all('Question')
@@ -48,8 +52,12 @@ app.get('/', function (req, res) {
             title: q.get('title'), description: q.get('description'),
             answers: q.get('answers').length, author: q.get('author') }); });
         res.send(foo);
-    });
+    }), (reason) => {
+        // rejection
+        // res.status(500).send();
+      }
 });
+
 // get a specific question
 app.get('/:id', function (req, res) {
     instance.find('Question', req.params.id)
@@ -67,6 +75,7 @@ app.get('/:id', function (req, res) {
         res.send(ques);
     });
 });
+
 var checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
         cache: true,
@@ -79,6 +88,7 @@ var checkJwt = jwt({
     issuer: "https://surminen-test.au.auth0.com/",
     algorithms: ['RS256']
 });
+
 // insert a new question
 app.post('/', checkJwt, function (req, res) {
     var _a = req.body, title = _a.title, description = _a.description;
@@ -89,6 +99,7 @@ app.post('/', checkJwt, function (req, res) {
     });
     res.status(200).send();
 });
+
 // insert a new answer to a question
 app.post('/answer/:id', checkJwt, function (req, res) {
     var answer = req.body.answer;
@@ -98,7 +109,11 @@ app.post('/answer/:id', checkJwt, function (req, res) {
     });
     res.status(200).send();
 });
+
 // start the server
-app.listen(8081, function () {
+export const server = app.listen(8081, function () {
     console.log('listening on port 8081');
 });
+
+// Export our app for testing purposes
+module.exports = app;
