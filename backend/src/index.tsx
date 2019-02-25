@@ -111,9 +111,9 @@ app.post('/answer/:id', checkJwt, function (req, res) {
 });
 
 // start the server
-export const server = app.listen(8081, function () {
+var server = app.listen(8081, function () {
     console.log('listening on port 8081');
 });
 
-// Export our app for testing purposes
-module.exports = app;
+// Export our server for testing purposes
+module.exports = server, instance;
